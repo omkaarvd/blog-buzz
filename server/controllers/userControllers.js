@@ -1,8 +1,9 @@
-const User = require('../models/user_model.js');
-const Blogs = require('../models/blog_model.js');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const validator = require('validator');
+
+const User = require('../models/user_model.js');
+const Blogs = require('../models/blog_model.js');
 const { getIdFromHeader } = require('../helper/getIdFromHeader.js');
 
 const generateToken = (user) => {
@@ -141,6 +142,10 @@ const delete_user = async (req, res) => {
   }
 };
 
+const getUserProfileImage = async (req, res) => {
+  console.log(req.file);
+};
+
 module.exports = {
   login_user,
   signup_user,
@@ -148,4 +153,5 @@ module.exports = {
   getUser,
   updateUser,
   delete_user,
+  getUserProfileImage,
 };

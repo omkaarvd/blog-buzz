@@ -7,6 +7,7 @@ const {
   getUser,
   updateUser,
   delete_user,
+  getUserProfileImage,
 } = require('../controllers/userControllers.js');
 
 // login post route
@@ -26,5 +27,7 @@ router.get('/', getUser);
 
 // delete a user and all its blogs
 router.delete('/:id', delete_user);
+
+router.post('/image', upload.single('file'), getUserProfileImage);
 
 module.exports = router;
