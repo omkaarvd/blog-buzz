@@ -33,8 +33,8 @@ const getUserById = async (req, res) => {
 
 // get user
 const getUser = async (req, res) => {
-  const userId = getIdFromHeader(req.headers['x-access-token']);
   try {
+    const userId = getIdFromHeader(req.headers['x-access-token']);
     const user = await User.findOne({ _id: userId }).select('-password');
     if (!user) throw new Error('User not found');
     res.status(200).json(user);

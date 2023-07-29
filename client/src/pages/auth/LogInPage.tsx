@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { useState, FormEvent } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 
 import { AppDispatch } from '../../redux/Store';
 import { logIn } from '../../redux/slice/UserSlice';
@@ -11,7 +10,6 @@ const LogInPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -24,7 +22,7 @@ const LogInPage: React.FC = () => {
       if (response.status === 200) {
         localStorage.setItem('user', response.data.token);
         dispatch(logIn({ ...response.data.user }));
-        navigate('/');
+        window.location.href = '/';
       }
     } catch (error) {
       console.log(error);

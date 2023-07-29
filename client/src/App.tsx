@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
@@ -33,8 +33,8 @@ const App: React.FC = () => {
       .then(({ data }) => {
         dispatch(logIn(data));
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error: Error) => {
+        console.log(error.message);
       });
   }, []);
 

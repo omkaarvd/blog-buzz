@@ -1,17 +1,17 @@
 import axios from 'axios';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 
 import { AuthState, BlogState } from '../../types';
 import { useAppSelector } from '../../redux/Store';
 import BlogComponent from './BlogComponent';
+import { convertToBase64 } from '../../helpers/base64Image';
 
 const Profile: React.FC = () => {
   const user = useAppSelector<AuthState>((state) => state.user.value);
   const [blogs, setBlogs] = useState<BlogState[]>([]);
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [changeImage, setChangeImage] = useState<boolean>(false);
   const [name, setName] = useState<string>(user.name);
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     axios
@@ -51,15 +51,20 @@ const Profile: React.FC = () => {
       });
   };
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0] || null;
-    setSelectedImage(file);
+  const handleClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
   };
 
-  const handleImageUpload = async () => {
-    if (selectedImage) {
+  const handleImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0] || null;
+
+    if (file) {
       // Convert the image to base64
-      const base64Image = await convertToBase64(selectedImage);
+      const base64Image = await convertToBase64(file);
 
       try {
         const response = await axios.post(
@@ -88,36 +93,25 @@ const Profile: React.FC = () => {
       <div className="mb-4 flex flex-row items-center justify-between">
         <div className="flex flex-row items-center justify-start gap-8">
           <div className="flex flex-col items-center">
-            {changeImage ? (
-              <>
-                <input
-                  type="file"
-                  onChange={handleImageChange}
-                  name="user-profile"
-                  accept=".jpeg, .png, .jpg"
-                />
-                <button
-                  className="rounded-md bg-[#1aac83] p-1 text-white hover:bg-[#0f9b7a]"
-                  onClick={() => void handleImageUpload()}
-                >
-                  Upload
-                </button>
-              </>
-            ) : (
-              <>
-                <img
-                  src={user.image || '/user-profile.svg'}
-                  alt="profile"
-                  className="h-20 w-20 rounded-full object-cover"
-                />
-                <button
-                  className="m-1 rounded-md bg-[#1aac83] p-1 text-white hover:bg-[#0f9b7a]"
-                  onClick={() => setChangeImage(true)}
-                >
-                  Change
-                </button>
-              </>
-            )}
+            <img
+              src={user.image || '/user-profile.svg'}
+              alt="profile"
+              className="h-20 w-20 rounded-full object-cover"
+            />
+            <input
+              type="file"
+              className="hidden"
+              onChange={(e) => void handleImageChange(e)}
+              name="user-profile"
+              accept=".jpeg, .png, .jpg"
+              ref={fileInputRef}
+            />
+            <button
+              className="m-1 rounded-md bg-[#1aac83] p-1 text-white hover:bg-[#0f9b7a]"
+              onClick={handleClick}
+            >
+              Change
+            </button>
           </div>
           {isEditing ? (
             <>
@@ -186,18 +180,3 @@ const Profile: React.FC = () => {
 };
 
 export default Profile;
-
-const convertToBase64 = (file: File) => {
-  return new Promise((resolve, reject) => {
-    const fileReader = new FileReader();
-    fileReader.readAsDataURL(file);
-
-    fileReader.onload = () => {
-      resolve(fileReader.result);
-    };
-
-    fileReader.onerror = (error) => {
-      reject(error);
-    };
-  });
-};

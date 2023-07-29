@@ -12,8 +12,3 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     </ReduxProvider>
   </React.StrictMode>
 );
-
-/**
- * 2) functionality to verify user's email address
- * 3) functionality to reset user's password
- */
