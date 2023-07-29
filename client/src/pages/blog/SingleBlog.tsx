@@ -8,7 +8,7 @@ import { useAppSelector } from '../../redux/Store';
 import { BlogState, CommentState } from '../../types';
 
 const SingleBlog: React.FC = () => {
-  const { id }: { id: string } = useParams<string>();
+  const { id } = useParams() as { id: string };
   const userId = useAppSelector((state) => state.user.value._id);
 
   const [error, setError] = useState(false);

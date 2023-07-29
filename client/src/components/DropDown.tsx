@@ -27,9 +27,9 @@ export const DropDown = () => {
     <>
       <button>
         <img
-          src="/user-profile.svg"
+          src={user.image || '/user-profile.svg'}
           alt="user-profile"
-          className="m-auto h-9"
+          className="m-auto h-9 w-9 rounded-full object-cover ring-2 ring-[#1aac83]"
           id="dropdown-icon"
         />
       </button>

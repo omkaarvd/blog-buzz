@@ -15,6 +15,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  image: {
+    type: String,
+    default: '',
+  },
   blogsRef: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -23,6 +27,6 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
-const User = mongoose.model('users', userSchema);
+const User = mongoose.models.users || mongoose.model('users', userSchema);
 
 module.exports = User;

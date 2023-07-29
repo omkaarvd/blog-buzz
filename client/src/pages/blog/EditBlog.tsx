@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { BlogState } from '../../types';
 
 const EditBlog: React.FC = () => {
-  const { id }: { id: string } = useParams<string>();
+  const { id } = useParams() as { id: string };
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [userId, setUserId] = useState('');

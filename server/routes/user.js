@@ -3,7 +3,7 @@ const router = express.Router();
 const {
   login_user,
   signup_user,
-  getUserNameById,
+  getUserById,
   getUser,
   updateUser,
   delete_user,
@@ -17,7 +17,7 @@ router.post('/login', login_user);
 router.post('/signup', signup_user);
 
 // GET a user by ID
-router.get('/:id', getUserNameById);
+router.get('/:id', getUserById);
 
 // UPDATE a user
 router.patch('/:id', updateUser);
@@ -28,6 +28,6 @@ router.get('/', getUser);
 // delete a user and all its blogs
 router.delete('/:id', delete_user);
 
-router.post('/image', upload.single('file'), getUserProfileImage);
+router.post('/image', getUserProfileImage);
 
 module.exports = router;

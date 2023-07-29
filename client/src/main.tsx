@@ -14,7 +14,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 );
 
 /**
- * 1) functionality to add user profile picture
  * 2) functionality to verify user's email address
  * 3) functionality to reset user's password
  */

@@ -20,12 +20,12 @@ const generateToken = (user) => {
 };
 
 // get user by id
-const getUserNameById = async (req, res) => {
+const getUserById = async (req, res) => {
   const { id } = req.params;
 
   try {
     const user = await User.findOne({ _id: id });
-    res.status(200).json(user.name);
+    res.status(200).json({ name: user.name, image: user.image });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -143,13 +143,22 @@ const delete_user = async (req, res) => {
 };
 
 const getUserProfileImage = async (req, res) => {
-  console.log(req.file);
+  try {
+    const { image } = req.body;
+    const userId = getIdFromHeader(req.headers['x-access-token']);
+
+    await User.findOneAndUpdate({ _id: userId }, { image });
+
+    res.status(200).json({ status: 'ok' });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 };
 
 module.exports = {
   login_user,
   signup_user,
-  getUserNameById,
+  getUserById,
   getUser,
   updateUser,
   delete_user,

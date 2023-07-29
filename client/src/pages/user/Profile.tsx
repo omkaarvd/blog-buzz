@@ -58,26 +58,27 @@ const Profile: React.FC = () => {
 
   const handleImageUpload = async () => {
     if (selectedImage) {
-      const formData = new FormData();
-      formData.append('profilePicture', selectedImage);
-      console.log(formData);
+      // Convert the image to base64
+      const base64Image = await convertToBase64(selectedImage);
 
       try {
-        // Send the FormData to the backend using an HTTP POST request
         const response = await axios.post(
           'http://localhost:1437/api/user/image',
           {
-            image: formData,
+            image: base64Image,
+          },
+          {
+            headers: {
+              'x-access-token': localStorage.getItem('user'),
+            },
           }
         );
 
         if (response.status === 200) {
-          // Image uploaded successfully
-          console.log('Image uploaded successfully!');
           window.location.reload();
         }
       } catch (error) {
-        console.error('Error uploading image:', error);
+        console.log(error);
       }
     }
   };
@@ -85,11 +86,16 @@ const Profile: React.FC = () => {
   return (
     <div className="mx-auto max-w-4xl pt-8">
       <div className="mb-4 flex flex-row items-center justify-between">
-        <div className="flex flex-row items-center justify-start gap-2">
+        <div className="flex flex-row items-center justify-start gap-8">
           <div className="flex flex-col items-center">
             {changeImage ? (
               <>
-                <input type="file" onChange={handleImageChange} />
+                <input
+                  type="file"
+                  onChange={handleImageChange}
+                  name="user-profile"
+                  accept=".jpeg, .png, .jpg"
+                />
                 <button
                   className="rounded-md bg-[#1aac83] p-1 text-white hover:bg-[#0f9b7a]"
                   onClick={() => void handleImageUpload()}
@@ -99,9 +105,13 @@ const Profile: React.FC = () => {
               </>
             ) : (
               <>
-                <img src="/user-profile.svg" alt="profile" className="h-20" />
+                <img
+                  src={user.image || '/user-profile.svg'}
+                  alt="profile"
+                  className="h-20 w-20 rounded-full object-cover"
+                />
                 <button
-                  className="rounded-md bg-[#1aac83] p-1 text-white hover:bg-[#0f9b7a]"
+                  className="m-1 rounded-md bg-[#1aac83] p-1 text-white hover:bg-[#0f9b7a]"
                   onClick={() => setChangeImage(true)}
                 >
                   Change
@@ -176,3 +186,18 @@ const Profile: React.FC = () => {
 };
 
 export default Profile;
+
+const convertToBase64 = (file: File) => {
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+
+    fileReader.onload = () => {
+      resolve(fileReader.result);
+    };
+
+    fileReader.onerror = (error) => {
+      reject(error);
+    };
+  });
+};

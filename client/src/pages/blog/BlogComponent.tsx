@@ -7,12 +7,14 @@ import { BlogState } from '../../types';
 
 const BlogComponent = ({ blog }: { blog: BlogState }) => {
   const currentUserId = useAppSelector((state) => state.user.value._id);
-  const [user, setUser] = useState<string>('');
+  const [user, setUser] = useState<{ name: string; image: string }>();
   const isLiked = blog.likedBy.includes(currentUserId);
 
   useEffect(() => {
     axios
-      .get<string>(`http://localhost:1437/api/user/${blog.createdBy}`)
+      .get<{ name: string; image: string }>(
+        `http://localhost:1437/api/user/${blog.createdBy}`
+      )
       .then(({ data }) => {
         setUser(data);
       })
@@ -24,8 +26,12 @@ const BlogComponent = ({ blog }: { blog: BlogState }) => {
   return (
     <li>
       <div className="mb-1 flex flex-row items-center justify-start gap-1">
-        <img src="/user-profile.svg" alt="user-profile" />
-        <span className="text-sm text-gray-600">{user}</span>
+        <img
+          src={user?.image || '/user-profile.svg'}
+          alt="user-profile"
+          className="h-6 w-6 rounded-full object-cover"
+        />
+        <span className="text-sm text-gray-600">{user?.name}</span>
       </div>
 
       <Link to={`/blog/${blog._id}`}>

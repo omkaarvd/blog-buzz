@@ -21,12 +21,14 @@ export type AuthState = {
   _id: string;
   name: string;
   email: string;
+  image: string;
 };
 
 export type User = {
   _id: string;
   name: string;
   email: string;
+  image: string;
   blogsRef: string[];
 };
 

@@ -7,9 +7,11 @@ const RenderComment = ({ comment }: { comment: CommentState }) => {
 
   useEffect(() => {
     axios
-      .get<string>(`http://localhost:1437/api/user/${comment.commentedBy}`)
+      .get<{ name: string; image: string }>(
+        `http://localhost:1437/api/user/${comment.commentedBy}`
+      )
       .then(({ data }) => {
-        setCommentedBy(data);
+        setCommentedBy(data.name);
       })
       .catch((err) => {
         console.log(err);
