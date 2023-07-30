@@ -9,22 +9,17 @@ const BlogComponent = ({ blog }: { blog: BlogState }) => {
   const currentUserId = useAppSelector<string>((state) => state.user.value._id);
   const isLiked = blog.likedBy.includes(currentUserId);
 
-  const handleDelete = async () => {
-    try {
-      const response = await axios.delete(
-        `http://localhost:1437/api/blogs/${blog._id}`,
-        {
-          headers: {
-            'x-access-token': localStorage.getItem('user'),
-          },
-        }
-      );
-      if (response.status === 200) {
+  const handleDelete = () => {
+    axios
+      .delete(`http://localhost:1437/api/blogs/${blog._id}`, {
+        headers: { 'x-access-token': localStorage.getItem('user') },
+      })
+      .then(() => {
         window.location.reload();
-      }
-    } catch (error) {
-      console.log(error);
-    }
+      })
+      .catch((error: Error) => {
+        console.log(error.message);
+      });
   };
 
   const handleEdit = () => {
@@ -41,7 +36,7 @@ const BlogComponent = ({ blog }: { blog: BlogState }) => {
           <button onClick={handleEdit}>
             <img src="/edit.svg" alt="edit" className="m-auto inline h-6" />
           </button>
-          <button onClick={() => void handleDelete()}>
+          <button onClick={handleDelete}>
             <img src="/delete.svg" alt="delete" className="m-auto inline h-6" />
           </button>
         </div>

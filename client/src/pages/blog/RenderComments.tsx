@@ -13,8 +13,8 @@ const RenderComment = ({ comment }: { comment: CommentState }) => {
       .then(({ data }) => {
         setCommentedBy(data.name);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error: Error) => {
+        console.log(error.message);
       });
   }, []);
 

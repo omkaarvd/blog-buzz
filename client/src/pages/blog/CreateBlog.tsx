@@ -5,35 +5,27 @@ const CreateBlog: React.FC = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    try {
-      const response = await axios.post(
+    axios
+      .post(
         'http://localhost:1437/api/blogs',
-        {
-          title,
-          content,
-        },
-        {
-          headers: {
-            'x-access-token': localStorage.getItem('user'),
-          },
-        }
-      );
-
-      if (response.status === 200) {
+        { title, content },
+        { headers: { 'x-access-token': localStorage.getItem('user') } }
+      )
+      .then(() => {
         window.location.href = '/';
-      }
-    } catch (error) {
-      console.log(error);
-    }
+      })
+      .catch((error: Error) => {
+        console.log(error.message);
+      });
   };
 
   return (
     <div className="mx-auto max-w-4xl p-4">
       <h3 className="mb-4 text-2xl font-bold">Create a Blog</h3>
-      <form onSubmit={(e) => void handleSubmit(e)}>
+      <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="title" className="mb-2 text-lg font-semibold">
             Title

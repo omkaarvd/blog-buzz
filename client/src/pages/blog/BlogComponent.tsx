@@ -18,8 +18,8 @@ const BlogComponent = ({ blog }: { blog: BlogState }) => {
       .then(({ data }) => {
         setUser(data);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error: Error) => {
+        console.log(error.message);
       });
   }, []);
 

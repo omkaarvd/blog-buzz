@@ -17,9 +17,9 @@ const Home: React.FC = () => {
         setBlogs(data);
         setLoading(false);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error: Error) => {
         setLoading(false);
+        console.log(error.message);
       });
   }, []);
 

@@ -23,7 +23,7 @@ const SignUpPage: React.FC = () => {
 
       if (response.status === 200) {
         localStorage.setItem('user', response.data.token);
-        dispatch(logIn({ ...response.data.user }));
+        dispatch(logIn({ ...response.data }));
         window.location.href = '/';
       }
     } catch (error) {

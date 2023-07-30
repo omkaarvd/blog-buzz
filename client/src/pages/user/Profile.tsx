@@ -16,15 +16,13 @@ const Profile: React.FC = () => {
   useEffect(() => {
     axios
       .get<BlogState[]>(`http://localhost:1437/api/blogs/user/${user._id}`, {
-        headers: {
-          'x-access-token': localStorage.getItem('user'),
-        },
+        headers: { 'x-access-token': localStorage.getItem('user') },
       })
       .then(({ data }) => {
         setBlogs(data);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((error: Error) => {
+        console.log(error.message);
       });
   }, []);
 
@@ -34,8 +32,8 @@ const Profile: React.FC = () => {
       .then(() => {
         window.location.reload();
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error: Error) => {
+        console.log(error.message);
       });
   };
 
@@ -46,8 +44,8 @@ const Profile: React.FC = () => {
         localStorage.removeItem('user');
         window.location.href = '/';
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error: Error) => {
+        console.log(error.message);
       });
   };
 
@@ -69,14 +67,8 @@ const Profile: React.FC = () => {
       try {
         const response = await axios.post(
           'http://localhost:1437/api/user/image',
-          {
-            image: base64Image,
-          },
-          {
-            headers: {
-              'x-access-token': localStorage.getItem('user'),
-            },
-          }
+          { image: base64Image },
+          { headers: { 'x-access-token': localStorage.getItem('user') } }
         );
 
         if (response.status === 200) {

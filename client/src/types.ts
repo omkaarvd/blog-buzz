@@ -1,3 +1,9 @@
+export type CommentState = {
+  _id: string;
+  commentedBy: string;
+  comment: string;
+};
+
 export type BlogState = {
   _id: string;
   createdBy: string;
@@ -10,29 +16,18 @@ export type BlogState = {
   comments: CommentState[];
 };
 
-export type CommentState = {
+export interface User {
   _id: string;
-  commentedBy: string;
-  comment: string;
-};
+  name: string;
+  email: string;
+  image: string;
+  blogsRef?: string[];
+}
 
-export type AuthState = {
+export interface AuthState extends User {
   isAuthorized: boolean;
-  _id: string;
-  name: string;
-  email: string;
-  image: string;
-};
+}
 
-export type User = {
-  _id: string;
-  name: string;
-  email: string;
-  image: string;
-  blogsRef: string[];
-};
-
-export type AuthResponse = {
-  user: User;
+export interface AuthResponse extends User {
   token: string;
-};
+}

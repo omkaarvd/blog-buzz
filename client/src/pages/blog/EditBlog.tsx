@@ -17,39 +17,31 @@ const EditBlog: React.FC = () => {
         setContent(data.content);
         setUserId(data.createdBy);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error: Error) => {
+        console.log(error.message);
       });
   }, []);
 
-  const handleEdit = async (e: FormEvent) => {
+  const handleEdit = (e: FormEvent) => {
     e.preventDefault();
-    try {
-      const response = await axios.patch(
+    axios
+      .patch(
         `http://localhost:1437/api/blogs/${id}`,
-        {
-          title,
-          content,
-        },
-        {
-          headers: {
-            'x-access-token': localStorage.getItem('user'),
-          },
-        }
-      );
-
-      if (response.status === 200) {
+        { title, content },
+        { headers: { 'x-access-token': localStorage.getItem('user') } }
+      )
+      .then(() => {
         window.location.href = `/user/${userId}}`;
-      }
-    } catch (error) {
-      console.log(error);
-    }
+      })
+      .catch((error: Error) => {
+        console.log(error.message);
+      });
   };
 
   return (
     <div className="mx-auto max-w-4xl p-4">
       <h3 className="mb-4 text-2xl font-bold">Create a Blog</h3>
-      <form onSubmit={(e) => void handleEdit(e)}>
+      <form onSubmit={handleEdit}>
         <div className="mb-4">
           <label htmlFor="title" className="mb-2 text-lg font-semibold">
             Title

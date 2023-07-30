@@ -25,38 +25,32 @@ const SingleBlog: React.FC = () => {
         setLikeStatus(data.likedBy.includes(userId));
         setComments(data.comments);
       })
-      .catch((err) => {
+      .catch((err: Error) => {
         setError(true);
-        console.log(err);
+        console.log(err.message);
       });
   }, []);
 
-  const handleLikes = async () => {
+  const handleLikes = () => {
     if (likeStatus === false) {
       blog.likes += 1;
 
-      try {
-        const response = await axios.patch(
+      axios
+        .patch(
           `http://localhost:1437/api/blogs/${id}`,
-          {
-            likes: blog.likes,
-          },
-          {
-            headers: {
-              'x-access-token': localStorage.getItem('user'),
-            },
-          }
-        );
-        if (response.status === 200) {
+          { likes: blog.likes },
+          { headers: { 'x-access-token': localStorage.getItem('user') } }
+        )
+        .then(() => {
           setLikeStatus(true);
-        }
-      } catch (error) {
-        console.log(error);
-      }
+        })
+        .catch((error: Error) => {
+          console.log(error.message);
+        });
     }
   };
 
-  const handleComment = async (e: FormEvent) => {
+  const handleComment = (e: FormEvent) => {
     e.preventDefault();
 
     const newComment = {
@@ -64,23 +58,19 @@ const SingleBlog: React.FC = () => {
       comment: commentText,
     };
 
-    try {
-      const response = await axios.patch<CommentState>(
+    axios
+      .patch<CommentState>(
         `http://localhost:1437/api/blogs/${id}`,
         { comment: newComment },
-        {
-          headers: {
-            'x-access-token': localStorage.getItem('user'),
-          },
-        }
-      );
-      if (response.status === 200) {
+        { headers: { 'x-access-token': localStorage.getItem('user') } }
+      )
+      .then((response) => {
         setComments([...comments, response.data]);
         setCommentText('');
-      }
-    } catch (error) {
-      console.log(error);
-    }
+      })
+      .catch((error: Error) => {
+        console.log(error.message);
+      });
   };
 
   return (
@@ -97,7 +87,7 @@ const SingleBlog: React.FC = () => {
               </span>
             </div>
             <div className="flex flex-row items-start gap-2">
-              <button onClick={() => void handleLikes()}>
+              <button onClick={handleLikes}>
                 <img
                   src={likeStatus ? '/like-filled.svg' : '/like.svg'}
                   alt="delete"
@@ -112,7 +102,7 @@ const SingleBlog: React.FC = () => {
             <h3 className="mb-2 text-xl font-semibold">Comments</h3>
             {/* Comment Input */}
             <div className="mb-6">
-              <form onSubmit={(e) => void handleComment(e)}>
+              <form onSubmit={handleComment}>
                 <input
                   type="text"
                   placeholder="Add your comment..."
