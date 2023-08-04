@@ -25,7 +25,7 @@ const EditBlog: React.FC = () => {
       .catch((error: Error) => {
         console.log(error.message);
       });
-  }, []);
+  }, [id]);
 
   const handleEdit = (e: FormEvent) => {
     e.preventDefault();
