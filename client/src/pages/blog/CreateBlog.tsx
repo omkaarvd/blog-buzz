@@ -3,21 +3,11 @@ import React, { useRef } from 'react';
 import 'react-quill/dist/quill.snow.css';
 import ReactQuill from 'react-quill';
 import QuillToolbar from '../../components/QuillToolbar';
+import { modules } from '../../components/QuillModules';
 
 const CreateBlog: React.FC = () => {
   const titleRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<ReactQuill>(null);
-
-  const modules = {
-    toolbar: {
-      container: '#toolbar',
-    },
-    history: {
-      delay: 500,
-      maxStack: 100,
-      userOnly: true,
-    },
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

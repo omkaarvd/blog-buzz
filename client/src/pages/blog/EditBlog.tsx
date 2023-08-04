@@ -1,10 +1,15 @@
 import axios from 'axios';
-import { useState, FormEvent, useEffect } from 'react';
+import { useState, FormEvent, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { BlogState } from '../../types';
+import QuillToolbar from '../../components/QuillToolbar';
+import ReactQuill from 'react-quill';
+import { modules } from '../../components/QuillModules';
 
 const EditBlog: React.FC = () => {
   const { id } = useParams() as { id: string };
+  const contentRef = useRef<ReactQuill>(null);
+
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [userId, setUserId] = useState('');
@@ -24,10 +29,14 @@ const EditBlog: React.FC = () => {
 
   const handleEdit = (e: FormEvent) => {
     e.preventDefault();
+
     axios
       .patch(
         `http://localhost:1437/api/blogs/${id}`,
-        { title, content },
+        {
+          title,
+          content: contentRef.current?.value,
+        },
         { headers: { 'x-access-token': localStorage.getItem('user') } }
       )
       .then(() => {
@@ -40,41 +49,36 @@ const EditBlog: React.FC = () => {
 
   return (
     <div className="mx-auto max-w-4xl p-4">
-      <h3 className="mb-4 text-2xl font-bold">Create a Blog</h3>
-      <form onSubmit={handleEdit}>
-        <div className="mb-4">
-          <label htmlFor="title" className="mb-2 text-lg font-semibold">
-            Title
-          </label>
-          <input
-            type="text"
-            id="title"
-            required
-            className="w-full rounded-md border border-gray-300 p-2"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="content" className="mb-2 text-lg font-semibold">
-            Content
-          </label>
-          <textarea
-            id="content"
-            required
-            className="w-full rounded-md border border-gray-300 p-2"
-            rows={12}
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          ></textarea>
-        </div>
+      <div className="mb-4 flex flex-row items-center justify-between">
+        <h3 className="text-2xl font-bold">Create a Blog</h3>
         <button
-          type="submit"
+          onClick={handleEdit}
           className="rounded-md bg-[#1aac83] px-4 py-2 font-semibold text-white hover:bg-[#0f9b7a]"
         >
           Post
         </button>
-      </form>
+      </div>
+      <div className="mb-4">
+        <label htmlFor="title" className="mb-2 text-lg font-semibold">
+          Title
+        </label>
+        <input
+          type="text"
+          id="title"
+          required
+          className="w-full border border-gray-300 p-1 focus:outline-none"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+      </div>
+      <QuillToolbar />
+      <ReactQuill
+        theme="snow"
+        ref={contentRef}
+        modules={modules}
+        value={content}
+        className="bg-[#fff]"
+      />
     </div>
   );
 };
