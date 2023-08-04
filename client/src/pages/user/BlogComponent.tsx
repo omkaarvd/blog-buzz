@@ -43,7 +43,12 @@ const BlogComponent = ({ blog }: { blog: BlogState }) => {
       </div>
 
       <Link to={`/blog/${blog._id}`}>
-        <p className="text-gray-600">{blog.content.slice(0, 200)}...</p>
+        <p
+          className="text-gray-600 after:content-['...']"
+          dangerouslySetInnerHTML={{
+            __html: blog.content.slice(0, 400),
+          }}
+        ></p>
       </Link>
 
       <div className="mt-2 flex flex-row items-center justify-start gap-6">

@@ -1,12 +1,30 @@
 import axios from 'axios';
-import { useState, FormEvent } from 'react';
+import React, { useRef } from 'react';
+import 'react-quill/dist/quill.snow.css';
+import ReactQuill from 'react-quill';
+import QuillToolbar from '../../components/QuillToolbar';
 
 const CreateBlog: React.FC = () => {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const titleRef = useRef<HTMLInputElement>(null);
+  const contentRef = useRef<ReactQuill>(null);
 
-  const handleSubmit = (e: FormEvent) => {
+  const modules = {
+    toolbar: {
+      container: '#toolbar',
+    },
+    history: {
+      delay: 500,
+      maxStack: 100,
+      userOnly: true,
+    },
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const title = titleRef.current?.value;
+    const content = contentRef.current?.value;
+    console.log({ title, content });
 
     axios
       .post(
@@ -24,41 +42,35 @@ const CreateBlog: React.FC = () => {
 
   return (
     <div className="mx-auto max-w-4xl p-4">
-      <h3 className="mb-4 text-2xl font-bold">Create a Blog</h3>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="title" className="mb-2 text-lg font-semibold">
-            Title
-          </label>
-          <input
-            type="text"
-            id="title"
-            required
-            className="w-full rounded-lg border border-gray-300 p-2"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="content" className="mb-2 text-lg font-semibold">
-            Content
-          </label>
-          <textarea
-            id="content"
-            required
-            className="w-full rounded-lg border border-gray-300 p-2"
-            rows={12}
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          ></textarea>
-        </div>
+      <div className="mb-4 flex flex-row items-center justify-between">
+        <h3 className="text-2xl font-bold">Create a Blog</h3>
         <button
-          type="submit"
+          onClick={handleSubmit}
           className="rounded-md bg-[#1aac83] px-4 py-2 font-semibold text-white hover:bg-[#0f9b7a]"
         >
           Post
         </button>
-      </form>
+      </div>
+      <div className="mb-4">
+        <label htmlFor="title" className="mb-2 text-lg font-semibold">
+          Title
+        </label>
+        <input
+          type="text"
+          id="title"
+          required
+          className="w-full border border-gray-300 p-1 focus:outline-none"
+          ref={titleRef}
+        />
+      </div>
+      <QuillToolbar />
+      <ReactQuill
+        theme="snow"
+        ref={contentRef}
+        placeholder={'Write here...'}
+        modules={modules}
+        className="bg-[#fff]"
+      />
     </div>
   );
 };

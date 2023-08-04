@@ -146,7 +146,6 @@ const Profile: React.FC = () => {
       </div>
 
       <div className="mt-8">
-        <h3 className="mb-4 text-2xl font-bold">Your Blogs</h3>
         {blogs.length === 0 ? (
           <p>No blogs created yet.</p>
         ) : (

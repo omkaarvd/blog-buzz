@@ -1,7 +1,6 @@
+const mongoose = require('mongoose');
 const Blogs = require('../models/blog_model.js');
 const User = require('../models/user_model.js');
-const mongoose = require('mongoose');
-
 const { getIdFromHeader } = require('../helper/getIdFromHeader.js');
 
 const createBlog = async (req, res) => {
@@ -70,7 +69,17 @@ const deleteBlog = async (req, res) => {
       _id: BlogId,
       createdBy: UserId,
     });
-    if (!blog) {
+
+    const user = await User.findOneAndUpdate(
+      {
+        _id: UserId,
+      },
+      {
+        $pull: { blogsRef: BlogId },
+      }
+    );
+
+    if (!blog || !user) {
       // this means that BlogId and UserId don't match for same blog
       return res.status(401).json({ error: 'Unauthorized Request!' });
     }

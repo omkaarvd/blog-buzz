@@ -81,23 +81,42 @@ const SingleBlog: React.FC = () => {
         <>
           <div className="mb-4 flex flex-row items-center justify-between">
             <div>
-              <h2 className="text-2xl font-bold">{blog.title}</h2>
+              <h2 className="border-l-8 border-[#1aac83] pl-1 text-2xl font-bold">
+                {blog.title}
+              </h2>
               <span className="text-sm text-gray-600">
                 {`Updated ${new Date(blog.updatedAt).toLocaleDateString()}`}
               </span>
             </div>
-            <div className="flex flex-row items-start gap-2">
-              <button onClick={handleLikes}>
-                <img
-                  src={likeStatus ? '/like-filled.svg' : '/like.svg'}
-                  alt="delete"
-                  className="m-auto inline h-6"
-                />
-              </button>
-              <span className="text-lg">{blog.likes}</span>
+
+            <div className="flex flex-row items-center gap-6">
+              {typeof comments.length === 'number' && (
+                <div className="flex flex-row items-start gap-2">
+                  <img
+                    src="/comment.svg"
+                    alt="delete"
+                    className="m-auto inline h-6"
+                  />
+                  <span className="text-lg">{comments.length}</span>
+                </div>
+              )}
+
+              <div className="flex flex-row items-start gap-2">
+                <button onClick={handleLikes}>
+                  <img
+                    src={likeStatus ? '/like-filled.svg' : '/like.svg'}
+                    alt="delete"
+                    className="m-auto inline h-6"
+                  />
+                </button>
+                <span className="text-lg">{blog.likes}</span>
+              </div>
             </div>
           </div>
-          <div className="mb-4">{blog.content}</div>
+          <div
+            className="mb-4"
+            dangerouslySetInnerHTML={{ __html: blog.content }}
+          ></div>
           <div className="mt-6">
             <h3 className="mb-2 text-xl font-semibold">Comments</h3>
             {/* Comment Input */}
