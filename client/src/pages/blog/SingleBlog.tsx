@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { useEffect, useState, FormEvent } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import parse from 'html-react-parser';
 
 import RenderComments from './RenderComments';
 import NotFound from '../error/NotFound';
@@ -16,12 +17,14 @@ const SingleBlog: React.FC = () => {
   const [likeStatus, setLikeStatus] = useState(false);
   const [commentText, setCommentText] = useState('');
   const [comments, setComments] = useState<CommentState[]>([]);
+  const [htmlString, setHtmlString] = useState('');
 
   useEffect(() => {
     axios
       .get<BlogState>(`http://localhost:1437/api/blogs/${id}`)
       .then(({ data }) => {
         setBlog(data);
+        setHtmlString(data.content);
         setLikeStatus(data.likedBy.includes(userId));
         setComments(data.comments);
       })
@@ -50,7 +53,7 @@ const SingleBlog: React.FC = () => {
     }
   };
 
-  const handleComment = (e: FormEvent) => {
+  const handleComment = (e: React.FormEvent) => {
     e.preventDefault();
 
     const newComment = {
@@ -115,8 +118,10 @@ const SingleBlog: React.FC = () => {
           </div>
           <div
             className="mb-4"
-            dangerouslySetInnerHTML={{ __html: blog.content }}
-          ></div>
+            // dangerouslySetInnerHTML={{ __html: blog.content }}
+          >
+            {parse(htmlString)}
+          </div>
           <div className="mt-6">
             <h3 className="mb-2 text-xl font-semibold">Comments</h3>
             {/* Comment Input */}

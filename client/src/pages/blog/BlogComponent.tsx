@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import parse from 'html-react-parser';
 
 import { useAppSelector } from '../../redux/Store';
 import { BlogState } from '../../types';
@@ -9,6 +10,7 @@ const BlogComponent = ({ blog }: { blog: BlogState }) => {
   const currentUserId = useAppSelector((state) => state.user.value._id);
   const [user, setUser] = useState<{ name: string; image: string }>();
   const isLiked = blog.likedBy.includes(currentUserId);
+  const htmlString = blog.content;
 
   useEffect(() => {
     axios
@@ -36,12 +38,9 @@ const BlogComponent = ({ blog }: { blog: BlogState }) => {
 
       <Link to={`/blog/${blog._id}`}>
         <h3 className="text-xl font-semibold">{blog.title}</h3>
-        <p
-          className="text-gray-600 after:content-['...']"
-          dangerouslySetInnerHTML={{
-            __html: blog.content.slice(0, 400),
-          }}
-        ></p>
+        <div className="text-gray-600">
+          {parse(htmlString.slice(0, 300))}...
+        </div>
       </Link>
 
       <div className="mt-2 flex flex-row items-center justify-start gap-6">

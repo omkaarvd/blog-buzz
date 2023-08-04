@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import parse from 'html-react-parser';
 
 import { BlogState } from '../../types';
 import { useAppSelector } from '../../redux/Store';
@@ -8,6 +9,7 @@ const BlogComponent = ({ blog }: { blog: BlogState }) => {
   const navigate = useNavigate();
   const currentUserId = useAppSelector<string>((state) => state.user.value._id);
   const isLiked = blog.likedBy.includes(currentUserId);
+  const htmlString = blog.content;
 
   const handleDelete = () => {
     axios
@@ -43,12 +45,9 @@ const BlogComponent = ({ blog }: { blog: BlogState }) => {
       </div>
 
       <Link to={`/blog/${blog._id}`}>
-        <p
-          className="text-gray-600 after:content-['...']"
-          dangerouslySetInnerHTML={{
-            __html: blog.content.slice(0, 400),
-          }}
-        ></p>
+        <div className="text-gray-600">
+          {parse(htmlString.slice(0, 300))}...
+        </div>
       </Link>
 
       <div className="mt-2 flex flex-row items-center justify-start gap-6">
