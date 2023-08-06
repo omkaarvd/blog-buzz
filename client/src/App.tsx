@@ -1,21 +1,23 @@
 import axios from 'axios';
-import { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import Navbar from './components/Navbar';
-import Home from './pages/home/Home';
-import PreHome from './pages/home/PreHome';
-import NotFound from './pages/error/NotFound';
-import CreateBlog from './pages/blog/CreateBlog';
-import SingleBlog from './pages/blog/SingleBlog';
-import LogInPage from './pages/auth/LogInPage';
-import SignUpPage from './pages/auth/SignUpPage';
-import EditBlog from './pages/blog/EditBlog';
-import Profile from './pages/user/Profile';
 import { AppDispatch, useAppSelector } from './redux/Store';
 import { logIn } from './redux/slice/UserSlice';
 import { User } from './types';
+
+const Navbar = React.lazy(() => import('./components/Navbar'));
+const Home = React.lazy(() => import('./pages/home/Home'));
+const PreHome = React.lazy(() => import('./pages/home/PreHome'));
+const NotFound = React.lazy(() => import('./pages/error/NotFound'));
+const CreateBlog = React.lazy(() => import('./pages/blog/CreateBlog'));
+const SingleBlog = React.lazy(() => import('./pages/blog/SingleBlog'));
+const LogInPage = React.lazy(() => import('./pages/auth/LogInPage'));
+const SignUpPage = React.lazy(() => import('./pages/auth/SignUpPage'));
+const EditBlog = React.lazy(() => import('./pages/blog/EditBlog'));
+const Profile = React.lazy(() => import('./pages/user/Profile'));
+const Loader = React.lazy(() => import('./components/Loader'));
 
 const App: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -41,28 +43,36 @@ const App: React.FC = () => {
   return (
     <BrowserRouter>
       <Navbar />
-      <Routes>
-        <Route path="/" element={userIsAuthorized ? <Home /> : <PreHome />} />
+      <Suspense
+        fallback={
+          <div className="absolute left-2/4 top-2/4">
+            <Loader />
+          </div>
+        }
+      >
+        <Routes>
+          <Route path="/" element={userIsAuthorized ? <Home /> : <PreHome />} />
 
-        {userIsAuthorized && <Route path="/user/:id" element={<Profile />} />}
+          {userIsAuthorized && <Route path="/user/:id" element={<Profile />} />}
 
-        {!userIsAuthorized && (
-          <Route path="/user">
-            <Route path="signup" element={<SignUpPage />} />
-            <Route path="login" element={<LogInPage />} />
-          </Route>
-        )}
+          {!userIsAuthorized && (
+            <Route path="/user">
+              <Route path="signup" element={<SignUpPage />} />
+              <Route path="login" element={<LogInPage />} />
+            </Route>
+          )}
 
-        {userIsAuthorized && (
-          <Route path="/blog">
-            <Route path=":id" element={<SingleBlog />} />
-            <Route path="create" element={<CreateBlog />} />
-            <Route path="edit/:id" element={<EditBlog />} />
-          </Route>
-        )}
+          {userIsAuthorized && (
+            <Route path="/blog">
+              <Route path=":id" element={<SingleBlog />} />
+              <Route path="create" element={<CreateBlog />} />
+              <Route path="edit/:id" element={<EditBlog />} />
+            </Route>
+          )}
 
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 };

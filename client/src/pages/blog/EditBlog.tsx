@@ -1,9 +1,11 @@
 import axios from 'axios';
 import { useState, FormEvent, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
 import { BlogState } from '../../types';
 import QuillToolbar from '../../components/QuillToolbar';
-import ReactQuill from 'react-quill';
 import { modules } from '../../components/QuillModules';
 
 const EditBlog: React.FC = () => {
