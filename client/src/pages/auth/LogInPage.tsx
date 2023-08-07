@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 
 import { AppDispatch } from '../../redux/Store';
 import { logIn } from '../../redux/slice/UserSlice';
-import { AuthResponse } from '../../types';
+import { AuthResponse } from '../../types/types';
 
 const LogInPage: React.FC = () => {
   const [email, setEmail] = useState('');

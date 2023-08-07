@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import parse from 'html-react-parser';
 
 import { useAppSelector } from '../../redux/Store';
-import { BlogState } from '../../types';
+import { BlogState } from '../../types/types';
 
 const BlogComponent = ({ blog }: { blog: BlogState }) => {
   const currentUserId = useAppSelector((state) => state.user.value._id);

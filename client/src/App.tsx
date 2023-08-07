@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { AppDispatch, useAppSelector } from './redux/Store';
 import { logIn } from './redux/slice/UserSlice';
-import { User } from './types';
+import { User } from './types/types';
 
 const Navbar = React.lazy(() => import('./components/Navbar'));
 const Home = React.lazy(() => import('./pages/home/Home'));

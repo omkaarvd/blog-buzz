@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useRef, useEffect, useState } from 'react';
 
-import { AuthState, BlogState } from '../../types';
+import { AuthState, BlogState } from '../../types/types';
 import { useAppSelector } from '../../redux/Store';
 import BlogComponent from './BlogComponent';
 import { convertToBase64 } from '../../helpers/base64Image';

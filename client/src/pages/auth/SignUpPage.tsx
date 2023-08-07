@@ -4,7 +4,7 @@ import React, { useState, FormEvent } from 'react';
 
 import { logIn } from '../../redux/slice/UserSlice';
 import { AppDispatch } from '../../redux/Store';
-import { AuthResponse } from '../../types';
+import { AuthResponse } from '../../types/types';
 
 const SignUpPage: React.FC = () => {
   const [name, setName] = useState('');

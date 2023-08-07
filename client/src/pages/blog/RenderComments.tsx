@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { CommentState } from '../../types';
+import { CommentState } from '../../types/types';
 
 const RenderComment = ({ comment }: { comment: CommentState }) => {
   const [commentedBy, setCommentedBy] = useState<string>(comment.commentedBy);

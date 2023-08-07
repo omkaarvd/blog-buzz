@@ -6,7 +6,7 @@ import parse from 'html-react-parser';
 import RenderComments from './RenderComments';
 import NotFound from '../error/NotFound';
 import { useAppSelector } from '../../redux/Store';
-import { BlogState, CommentState } from '../../types';
+import { BlogState, CommentState } from '../../types/types';
 
 const SingleBlog: React.FC = () => {
   const { id } = useParams() as { id: string };

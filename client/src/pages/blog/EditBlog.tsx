@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-import { BlogState } from '../../types';
+import { BlogState } from '../../types/types';
 import QuillToolbar from '../../components/QuillToolbar';
 import { modules } from '../../components/QuillModules';
 
