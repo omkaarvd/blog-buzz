@@ -1,18 +1,18 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const validator = require('validator');
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import validator from 'validator';
+import { Response, Request } from 'express';
+import User from '../models/user_model';
+import Blog from '../models/blog_model';
+import { getIdFromHeader } from '../helper/getIdFromHeader';
 
-const User = require('../models/user_model.js');
-const Blogs = require('../models/blog_model.js');
-const { getIdFromHeader } = require('../helper/getIdFromHeader.js');
-
-const generateToken = (user) => {
+const generateToken = (user: any) => {
   return jwt.sign(
     {
       id: user._id,
       name: user.name,
     },
-    process.env.JWT_SECRET,
+    process.env.JWT_SECRET!,
     {
       expiresIn: '15d',
     }
@@ -20,30 +20,30 @@ const generateToken = (user) => {
 };
 
 // get user by id
-const getUserById = async (req, res) => {
+const getUserById = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
     const user = await User.findOne({ _id: id });
     res.status(200).json({ name: user.name, image: user.image });
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };
 
 // get user
-const getUser = async (req, res) => {
+const getUser = async (req: Request, res: Response) => {
   try {
     const userId = getIdFromHeader(req.headers['x-access-token']);
     const user = await User.findOne({ _id: userId }).select('-password');
     if (!user) throw new Error('User not found');
     res.status(200).json(user);
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };
 
-const updateUser = async (req, res) => {
+const updateUser = async (req: Request, res: Response) => {
   const { name } = req.body;
   const { id } = req.params;
 
@@ -54,13 +54,13 @@ const updateUser = async (req, res) => {
     }
     await User.findOneAndUpdate({ _id: id }, { name });
     res.status(200).json({ status: 'ok' });
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };
 
 // login user
-const login_user = async (req, res) => {
+const login_user = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   try {
     if (!email || !password) throw new Error('All fields must be filled out');
@@ -81,13 +81,13 @@ const login_user = async (req, res) => {
       },
       token,
     });
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };
 
 // signup user
-const signup_user = async (req, res) => {
+const signup_user = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
 
   try {
@@ -122,27 +122,27 @@ const signup_user = async (req, res) => {
     res
       .status(200)
       .json({ id: user._id, name: user.name, email: user.email, token });
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };
 
-const delete_user = async (req, res) => {
+const delete_user = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
     const user = await User.findOneAndDelete({ _id: id }).select('-password');
     if (!user) throw new Error('User not found');
 
-    await Blogs.deleteMany({ createdBy: id });
+    await Blog.deleteMany({ createdBy: id });
 
     res.status(200).json({ status: 'ok' });
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };
 
-const getUserProfileImage = async (req, res) => {
+const getUserProfileImage = async (req: Request, res: Response) => {
   try {
     const { image } = req.body;
     const userId = getIdFromHeader(req.headers['x-access-token']);
@@ -150,12 +150,12 @@ const getUserProfileImage = async (req, res) => {
     await User.findOneAndUpdate({ _id: userId }, { image });
 
     res.status(200).json({ status: 'ok' });
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };
 
-module.exports = {
+export {
   login_user,
   signup_user,
   getUserById,

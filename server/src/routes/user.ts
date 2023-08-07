@@ -1,6 +1,5 @@
-const express = require('express');
-const router = express.Router();
-const {
+import { Router } from 'express';
+import {
   login_user,
   signup_user,
   getUserById,
@@ -8,7 +7,9 @@ const {
   updateUser,
   delete_user,
   getUserProfileImage,
-} = require('../controllers/userControllers.js');
+} from '../controllers/userControllers';
+
+const router = Router();
 
 // login post route
 router.post('/login', login_user);
@@ -30,4 +31,4 @@ router.delete('/:id', delete_user);
 
 router.post('/image', getUserProfileImage);
 
-module.exports = router;
+export default router;

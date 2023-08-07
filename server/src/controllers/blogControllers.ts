@@ -1,9 +1,10 @@
-const mongoose = require('mongoose');
-const Blogs = require('../models/blog_model.js');
-const User = require('../models/user_model.js');
-const { getIdFromHeader } = require('../helper/getIdFromHeader.js');
+import mongoose from 'mongoose';
+import { Request, Response } from 'express';
+import Blog from '../models/blog_model';
+import User from '../models/user_model';
+import { getIdFromHeader } from '../helper/getIdFromHeader';
 
-const createBlog = async (req, res) => {
+const createBlog = async (req: Request, res: Response) => {
   const id = getIdFromHeader(req.headers['x-access-token']);
   const { title, content } = req.body;
 
@@ -12,50 +13,50 @@ const createBlog = async (req, res) => {
   }
 
   try {
-    const blog = await Blogs.create({ createdBy: id, title, content });
+    const blog = await Blog.create({ createdBy: id, title, content });
 
     await User.findOneAndUpdate({ _id: id }, { $push: { blogsRef: blog._id } });
 
     res.status(200).json({ status: 'ok' });
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };
 
 // all blogs
-const getBlogs = async (req, res) => {
+const getBlogs = async (req: Request, res: Response) => {
   try {
-    const blogs = await Blogs.find();
+    const blogs = await Blog.find();
     res.status(200).json(blogs);
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };
 
 // single blog
-const getBlog = async (req, res) => {
+const getBlog = async (req: Request, res: Response) => {
   const { blogId } = req.params;
 
   try {
-    const blog = await Blogs.find({ _id: blogId });
+    const blog = await Blog.find({ _id: blogId });
     res.status(200).json(blog.at(0));
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };
 
-const getBlogsByUser = async (req, res) => {
+const getBlogsByUser = async (req: Request, res: Response) => {
   const userId = req.params.id;
 
   try {
-    const blogs = await Blogs.find({ createdBy: userId });
+    const blogs = await Blog.find({ createdBy: userId });
     res.status(200).json(blogs);
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };
 
-const deleteBlog = async (req, res) => {
+const deleteBlog = async (req: Request, res: Response) => {
   const UserId = getIdFromHeader(req.headers['x-access-token']);
   const { id: BlogId } = req.params;
   console.log(BlogId);
@@ -65,7 +66,7 @@ const deleteBlog = async (req, res) => {
   }
 
   try {
-    const blog = await Blogs.findOneAndDelete({
+    const blog = await Blog.findOneAndDelete({
       _id: BlogId,
       createdBy: UserId,
     });
@@ -84,12 +85,12 @@ const deleteBlog = async (req, res) => {
       return res.status(401).json({ error: 'Unauthorized Request!' });
     }
     res.status(200).json({ status: 'ok' });
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };
 
-const updateBlog = async (req, res) => {
+const updateBlog = async (req: Request, res: Response) => {
   const UserId = getIdFromHeader(req.headers['x-access-token']);
   const { id: BlogId } = req.params;
 
@@ -101,7 +102,7 @@ const updateBlog = async (req, res) => {
 
   if (title !== undefined && content !== undefined) {
     try {
-      const blog = await Blogs.findOneAndUpdate(
+      const blog = await Blog.findOneAndUpdate(
         { _id: BlogId, createdBy: UserId },
         { title, content },
         { new: true }
@@ -111,7 +112,7 @@ const updateBlog = async (req, res) => {
         return res.status(401).json({ error: 'Unauthorized Request!' });
       }
       res.status(200).json({ status: 'ok' });
-    } catch (error) {
+    } catch (error: any) {
       res.status(400).json({ error: error.message });
     }
   }
@@ -119,7 +120,7 @@ const updateBlog = async (req, res) => {
   // Only update likes if it is present in the request body
   if (likes !== undefined) {
     try {
-      await Blogs.findOneAndUpdate(
+      await Blog.findOneAndUpdate(
         { _id: BlogId },
         {
           likes,
@@ -128,7 +129,7 @@ const updateBlog = async (req, res) => {
         { new: true }
       );
       res.status(200).json({ status: 'ok' });
-    } catch (error) {
+    } catch (error: any) {
       res.status(400).json({ error: error.message });
     }
   }
@@ -136,7 +137,7 @@ const updateBlog = async (req, res) => {
   // Only update comments if it is present in the request body
   if (comment !== undefined) {
     try {
-      const blog = await Blogs.findOneAndUpdate(
+      const blog = await Blog.findOneAndUpdate(
         { _id: BlogId },
         {
           $push: { comments: comment },
@@ -144,13 +145,13 @@ const updateBlog = async (req, res) => {
         { new: true }
       );
       res.status(200).json(blog.comments.at(-1));
-    } catch (error) {
+    } catch (error: any) {
       res.status(400).json({ error: error.message });
     }
   }
 };
 
-module.exports = {
+export {
   createBlog,
   getBlog,
   getBlogs,

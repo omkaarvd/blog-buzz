@@ -1,14 +1,14 @@
-const express = require('express');
-const router = express.Router();
-
-const {
+import { Router } from 'express';
+import {
   createBlog,
   getBlogs,
   deleteBlog,
   updateBlog,
   getBlog,
   getBlogsByUser,
-} = require('../controllers/blogController.js');
+} from '../controllers/blogControllers';
+
+const router = Router();
 
 // GET all Blogs
 router.get('/', getBlogs);
@@ -28,4 +28,4 @@ router.delete('/:id', deleteBlog);
 // UPDATE a Blog
 router.patch('/:id', updateBlog);
 
-module.exports = router;
+export default router;
