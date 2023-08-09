@@ -4,7 +4,7 @@ import { useRef, useEffect, useState } from 'react';
 import { AuthState, BlogState } from '../../types/types';
 import { useAppSelector } from '../../redux/Store';
 import BlogComponent from './BlogComponent';
-import { convertToBase64 } from '../../helpers/base64Image';
+import { convertToBase64 } from '../../helpers/Base64Image';
 
 const Profile: React.FC = () => {
   const user = useAppSelector<AuthState>((state) => state.user.value);
