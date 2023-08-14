@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-
 import { BlogState } from '../../types/types';
 import BlogComponent from '../blog/BlogComponent';
 

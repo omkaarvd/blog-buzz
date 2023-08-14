@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { useRef, useEffect, useState } from 'react';
-
 import { AuthState, BlogState } from '../../types/types';
 import { useAppSelector } from '../../redux/Store';
 import BlogComponent from './BlogComponent';

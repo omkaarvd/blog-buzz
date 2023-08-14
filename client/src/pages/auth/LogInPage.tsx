@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React, { FormEvent, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-
 import { AppDispatch } from '../../redux/Store';
 import { logIn } from '../../redux/slice/UserSlice';
 import { AuthResponse } from '../../types/types';

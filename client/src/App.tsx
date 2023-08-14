@@ -2,7 +2,6 @@ import axios from 'axios';
 import React, { Suspense, useEffect, lazy } from 'react';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-
 import { AppDispatch, useAppSelector } from './redux/Store';
 import { logIn } from './redux/slice/UserSlice';
 import { User } from './types/types';
@@ -60,8 +59,6 @@ const App: React.FC = () => {
         <Routes>
           <Route path='/' element={userIsAuthorized ? <Home /> : <PreHome />} />
 
-          {userIsAuthorized && <Route path='/user/:id' element={<Profile />} />}
-
           {!userIsAuthorized && (
             <Route path='/user'>
               <Route path='signup' element={<SignUpPage />} />
@@ -70,11 +67,14 @@ const App: React.FC = () => {
           )}
 
           {userIsAuthorized && (
-            <Route path='/blog'>
-              <Route path=':id' element={<SingleBlog />} />
-              <Route path='create' element={<CreateBlog />} />
-              <Route path='edit/:id' element={<EditBlog />} />
-            </Route>
+            <>
+              <Route path='/user/:id' element={<Profile />} />
+              <Route path='/blog'>
+                <Route path=':id' element={<SingleBlog />} />
+                <Route path='create' element={<CreateBlog />} />
+                <Route path='edit/:id' element={<EditBlog />} />
+              </Route>
+            </>
           )}
 
           <Route path='*' element={<NotFound />} />

@@ -31,35 +31,35 @@ const CreateBlog: React.FC = () => {
   };
 
   return (
-    <div className="mx-auto max-w-4xl p-4">
-      <div className="mb-4 flex flex-row items-center justify-between">
-        <h3 className="text-2xl font-bold">Create a Blog</h3>
+    <div className='mx-auto max-w-4xl p-4'>
+      <div className='mb-4 flex flex-row items-center justify-between'>
+        <h3 className='text-2xl font-bold'>Create a Blog</h3>
         <button
           onClick={handleSubmit}
-          className="rounded-md bg-[#1aac83] px-4 py-2 font-semibold text-white hover:bg-[#0f9b7a]"
+          className='rounded-md bg-[#1aac83] px-4 py-2 font-semibold text-white hover:bg-[#0f9b7a]'
         >
           Post
         </button>
       </div>
-      <div className="mb-4">
-        <label htmlFor="title" className="mb-2 text-lg font-semibold">
+      <div className='mb-4'>
+        <label htmlFor='title' className='mb-2 text-lg font-semibold'>
           Title
         </label>
         <input
-          type="text"
-          id="title"
+          type='text'
+          id='title'
           required
-          className="w-full border border-gray-300 p-1 focus:outline-none"
+          className='w-full border border-gray-300 p-1 focus:outline-none'
           ref={titleRef}
         />
       </div>
       <QuillToolbar />
       <ReactQuill
-        theme="snow"
+        theme='snow'
         ref={contentRef}
         placeholder={'Write here...'}
         modules={modules}
-        className="bg-[#fff]"
+        className='bg-[#fff]'
       />
     </div>
   );

@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import parse from 'html-react-parser';
-
 import RenderComments from './RenderComments';
 import NotFound from '../error/NotFound';
 import { useAppSelector } from '../../redux/Store';
@@ -20,12 +19,8 @@ const SingleBlog: React.FC = () => {
   const [htmlString, setHtmlString] = useState('');
 
   useEffect(() => {
-    const controller = new AbortController();
-
     axios
-      .get<BlogState>(`http://localhost:1437/api/blogs/${id}`, {
-        signal: controller.signal,
-      })
+      .get<BlogState>(`http://localhost:1437/api/blogs/${id}`)
       .then(({ data }) => {
         setBlog(data);
         setHtmlString(data.content);
@@ -36,10 +31,6 @@ const SingleBlog: React.FC = () => {
         setError(true);
         console.log(err.message);
       });
-
-    return () => {
-      controller.abort();
-    };
   }, []);
 
   const handleLikes = () => {

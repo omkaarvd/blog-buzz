@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import parse from 'html-react-parser';
-
 import { BlogState } from '../../types/types';
 import { useAppSelector } from '../../redux/Store';
 
