@@ -17,8 +17,12 @@ const EditBlog: React.FC = () => {
   const [userId, setUserId] = useState('');
 
   useEffect(() => {
+    const controller = new AbortController();
+
     axios
-      .get<BlogState>(`http://localhost:1437/api/blogs/${id}`)
+      .get<BlogState>(`http://localhost:1437/api/blogs/${id}`, {
+        signal: controller.signal,
+      })
       .then(({ data }) => {
         setTitle(data.title);
         setContent(data.content);
@@ -27,6 +31,10 @@ const EditBlog: React.FC = () => {
       .catch((error: Error) => {
         console.log(error.message);
       });
+
+    return () => {
+      controller.abort();
+    };
   }, [id]);
 
   const handleEdit = (e: FormEvent) => {
@@ -50,36 +58,36 @@ const EditBlog: React.FC = () => {
   };
 
   return (
-    <div className="mx-auto max-w-4xl p-4">
-      <div className="mb-4 flex flex-row items-center justify-between">
-        <h3 className="text-2xl font-bold">Create a Blog</h3>
+    <div className='mx-auto max-w-4xl p-4'>
+      <div className='mb-4 flex flex-row items-center justify-between'>
+        <h3 className='text-2xl font-bold'>Create a Blog</h3>
         <button
           onClick={handleEdit}
-          className="rounded-md bg-[#1aac83] px-4 py-2 font-semibold text-white hover:bg-[#0f9b7a]"
+          className='rounded-md bg-[#1aac83] px-4 py-2 font-semibold text-white hover:bg-[#0f9b7a]'
         >
           Post
         </button>
       </div>
-      <div className="mb-4">
-        <label htmlFor="title" className="mb-2 text-lg font-semibold">
+      <div className='mb-4'>
+        <label htmlFor='title' className='mb-2 text-lg font-semibold'>
           Title
         </label>
         <input
-          type="text"
-          id="title"
+          type='text'
+          id='title'
           required
-          className="w-full border border-gray-300 p-1 focus:outline-none"
+          className='w-full border border-gray-300 p-1 focus:outline-none'
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
       </div>
       <QuillToolbar />
       <ReactQuill
-        theme="snow"
+        theme='snow'
         ref={contentRef}
         modules={modules}
         value={content}
-        className="bg-[#fff]"
+        className='bg-[#fff]'
       />
     </div>
   );

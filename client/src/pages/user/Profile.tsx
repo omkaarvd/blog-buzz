@@ -14,9 +14,12 @@ const Profile: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     axios
       .get<BlogState[]>(`http://localhost:1437/api/blogs/user/${user._id}`, {
         headers: { 'x-access-token': localStorage.getItem('user') },
+        signal: controller.signal,
       })
       .then(({ data }) => {
         setBlogs(data);
@@ -24,6 +27,10 @@ const Profile: React.FC = () => {
       .catch((error: Error) => {
         console.log(error.message);
       });
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   const saveEditedProfile = () => {
@@ -81,25 +88,25 @@ const Profile: React.FC = () => {
   };
 
   return (
-    <div className="mx-auto max-w-4xl pt-8">
-      <div className="mb-4 flex flex-row items-center justify-between">
-        <div className="flex flex-row items-center justify-start gap-8">
-          <div className="flex flex-col items-center">
+    <div className='mx-auto max-w-4xl pt-8'>
+      <div className='mb-4 flex flex-row items-center justify-between'>
+        <div className='flex flex-row items-center justify-start gap-8'>
+          <div className='flex flex-col items-center'>
             <img
               src={user.image || '/user-profile.svg'}
-              alt="profile"
-              className="h-20 w-20 rounded-full object-cover"
+              alt='profile'
+              className='h-20 w-20 rounded-full object-cover'
             />
             <input
-              type="file"
-              className="hidden"
+              type='file'
+              className='hidden'
               onChange={(e) => void handleImageChange(e)}
-              name="user-profile"
-              accept=".jpeg, .png, .jpg"
+              name='user-profile'
+              accept='.jpeg, .png, .jpg'
               ref={fileInputRef}
             />
             <button
-              className="m-1 rounded-md bg-[#1aac83] p-1 text-white hover:bg-[#0f9b7a]"
+              className='m-1 rounded-md bg-[#1aac83] p-1 text-white hover:bg-[#0f9b7a]'
               onClick={handleClick}
             >
               Change
@@ -109,21 +116,21 @@ const Profile: React.FC = () => {
             <>
               <span>
                 <input
-                  type="text"
-                  id="name"
-                  className="w-full rounded-md border border-[#ddd] p-1"
+                  type='text'
+                  id='name'
+                  className='w-full rounded-md border border-[#ddd] p-1'
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
                 />
-                <p className="text-lg text-gray-600">{user.email}</p>
+                <p className='text-lg text-gray-600'>{user.email}</p>
               </span>
             </>
           ) : (
             <>
               <span>
-                <h2 className="text-2xl font-bold">{name}</h2>
-                <p className="text-lg text-gray-600">{user.email}</p>
+                <h2 className='text-2xl font-bold'>{name}</h2>
+                <p className='text-lg text-gray-600'>{user.email}</p>
               </span>
             </>
           )}
@@ -131,21 +138,21 @@ const Profile: React.FC = () => {
         {!isEditing ? (
           <button
             onClick={() => setIsEditing(true)}
-            className="rounded-md bg-[#1aac83] px-4 py-2 font-semibold text-white hover:bg-[#0f9b7a]"
+            className='rounded-md bg-[#1aac83] px-4 py-2 font-semibold text-white hover:bg-[#0f9b7a]'
           >
             Edit
           </button>
         ) : (
           <button
             onClick={saveEditedProfile}
-            className="rounded-md bg-[#1aac83] px-4 py-2 font-semibold text-white hover:bg-[#0f9b7a]"
+            className='rounded-md bg-[#1aac83] px-4 py-2 font-semibold text-white hover:bg-[#0f9b7a]'
           >
             Save
           </button>
         )}
       </div>
 
-      <div className="mt-8">
+      <div className='mt-8'>
         {blogs.length === 0 ? (
           <p>No blogs created yet.</p>
         ) : (
@@ -157,11 +164,11 @@ const Profile: React.FC = () => {
         )}
       </div>
 
-      <div className="mt-4">
-        <h3 className="text-2xl font-bold text-gray-600">Danger Zone</h3>
+      <div className='mt-4'>
+        <h3 className='text-2xl font-bold text-gray-600'>Danger Zone</h3>
         <button
           onClick={deleteUserAccount}
-          className="mb-4 mt-2 rounded-md bg-[#1aac83] px-4 py-2 font-semibold text-white hover:bg-red-600"
+          className='mb-4 mt-2 rounded-md bg-[#1aac83] px-4 py-2 font-semibold text-white hover:bg-red-600'
         >
           Delete Account
         </button>
