@@ -1,11 +1,12 @@
 {
   "name": "server",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "main": "app.ts",
   "scripts": {
-    "start": "node ./src/app.ts",
-    "dev": "nodemon ./src/app.ts"
+    "start": "bun ./src/app.ts",
+    "dev": "bun --watch ./src/app.ts"
   },
   "keywords": [],
   "author": "",

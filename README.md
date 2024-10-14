@@ -3,6 +3,7 @@
 This is a full stack web application.
 
 ## Tech Stack
+
 1. React
 2. TypeScript
 3. Redux-Toolkit
